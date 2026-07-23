@@ -9,8 +9,8 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_SUPABASE_URL": "https://YOUR_PROJECT.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "YOUR_ANON_KEY"
+        "EXPO_PUBLIC_SUPABASE_URL": "https://ujscixwgqoabqowsoszq.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_H3cC5ICiOHoIdsvpey9fLA_NYOjNhSE"
       }
     },
     "production": {
@@ -18,8 +18,8 @@
         "buildType": "app-bundle"
       },
       "env": {
-        "EXPO_PUBLIC_SUPABASE_URL": "https://YOUR_PROJECT.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "YOUR_ANON_KEY"
+        "EXPO_PUBLIC_SUPABASE_URL": "https://ujscixwgqoabqowsoszq.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_H3cC5ICiOHoIdsvpey9fLA_NYOjNhSE"
       }
     }
   },
