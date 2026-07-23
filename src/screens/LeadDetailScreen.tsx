@@ -14,6 +14,7 @@ import { supabase } from "@/services/supabase";
 import { Lead } from "@/types";
 import { useCallHandler } from "@/hooks/useCallHandler";
 import CallOutcomeModal from "@/components/CallOutcomeModal";
+import AddFollowupModal from "@/components/AddFollowupModal";
 
 type TimelineItem = {
   id: string;
@@ -30,6 +31,7 @@ export default function LeadDetailScreen() {
   const [lead, setLead] = useState<Lead | null>(null);
   const [timeline, setTimeline] = useState<TimelineItem[]>([]);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [addFollowupVisible, setAddFollowupVisible] = useState(false);
 
   const { pendingCall, showOutcomeModal, startCall, closeOutcomeModal } =
     useCallHandler();
@@ -155,7 +157,16 @@ export default function LeadDetailScreen() {
         <ActionButton icon="location" label="Maps" onPress={handleMaps} disabled={!lead.city} />
       </View>
 
-      <Text style={styles.sectionTitle}>Activity Timeline</Text>
+      <View style={styles.sectionHeaderRow}>
+        <Text style={styles.sectionTitle}>Activity Timeline</Text>
+        <Pressable
+          style={styles.addFollowupButton}
+          onPress={() => setAddFollowupVisible(true)}
+        >
+          <Ionicons name="add-circle-outline" size={16} color="#0F172A" />
+          <Text style={styles.addFollowupButtonText}>Add Followup</Text>
+        </Pressable>
+      </View>
       {timeline.length === 0 && (
         <Text style={styles.empty}>No activity yet. Make the first call.</Text>
       )}
@@ -176,6 +187,18 @@ export default function LeadDetailScreen() {
         onClose={closeOutcomeModal}
         onSaved={() => {
           closeOutcomeModal();
+          loadLead();
+          loadTimeline();
+        }}
+      />
+
+      <AddFollowupModal
+        visible={addFollowupVisible}
+        leadId={lead.id}
+        currentUserId={currentUserId ?? ""}
+        onClose={() => setAddFollowupVisible(false)}
+        onSaved={() => {
+          setAddFollowupVisible(false);
           loadLead();
           loadTimeline();
         }}
@@ -249,6 +272,24 @@ const styles = StyleSheet.create({
   actionButtonText: { color: "#fff", fontWeight: "700", fontSize: 12 },
   actionButtonTextDisabled: { color: "#94A3B8" },
   sectionTitle: { fontSize: 15, fontWeight: "700", color: "#0F172A", marginTop: 22, marginBottom: 8 },
+  sectionHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 22,
+    marginBottom: 8
+  },
+  addFollowupButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    borderWidth: 1,
+    borderColor: "#0F172A",
+    borderRadius: 16,
+    paddingVertical: 5,
+    paddingHorizontal: 10
+  },
+  addFollowupButtonText: { fontSize: 11, fontWeight: "700", color: "#0F172A" },
   empty: { color: "#94A3B8" },
   timelineItem: {
     backgroundColor: "#fff",

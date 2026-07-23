@@ -8,9 +8,10 @@ import {
   StyleSheet,
   RefreshControl
 } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native";
 import { supabase } from "@/services/supabase";
 import { Lead, LeadStatus } from "@/types";
+import { Ionicons } from "@expo/vector-icons";
 import LeadFiltersModal, {
   LeadFilters,
   EMPTY_LEAD_FILTERS
@@ -104,6 +105,12 @@ export default function LeadsListScreen() {
   useEffect(() => {
     fetchLeads();
   }, [fetchLeads]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchLeads();
+    }, [fetchLeads])
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -222,6 +229,13 @@ export default function LeadsListScreen() {
         }
       />
 
+      <Pressable
+        style={styles.fab}
+        onPress={() => navigation.navigate("AddLead")}
+      >
+        <Ionicons name="add" size={28} color="#fff" />
+      </Pressable>
+
       <LeadFiltersModal
         visible={filtersModalVisible}
         initialFilters={filters}
@@ -306,5 +320,21 @@ const styles = StyleSheet.create({
   leadName: { fontSize: 15, fontWeight: "700", color: "#0F172A" },
   leadMeta: { fontSize: 12, color: "#64748B", marginTop: 2 },
   leadStatus: { fontSize: 11, color: "#0F172A", marginTop: 4, fontWeight: "600" },
-  empty: { textAlign: "center", color: "#94A3B8", marginTop: 40 }
+  empty: { textAlign: "center", color: "#94A3B8", marginTop: 40 },
+  fab: {
+    position: "absolute",
+    right: 20,
+    bottom: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: "#0F172A",
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4
+  }
 });
