@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { supabase } from "@/services/supabase";
 import { FollowupPriority } from "@/types";
+import { DateField, TimeField, formatDate, formatTime } from "@/components/DateTimeFields";
 
 interface Props {
   visible: boolean;
@@ -40,33 +41,36 @@ export default function AddFollowupModal({
   onClose,
   onSaved
 }: Props) {
-  const [date, setDate] = useState(""); // YYYY-MM-DD
-  const [time, setTime] = useState(""); // HH:mm
+  const [date, setDate] = useState<Date | null>(null);
+  const [time, setTime] = useState<Date | null>(null);
   const [type, setType] = useState("call");
   const [priority, setPriority] = useState<FollowupPriority>("medium");
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
 
   const reset = () => {
-    setDate("");
-    setTime("");
+    setDate(null);
+    setTime(null);
     setType("call");
     setPriority("medium");
     setNotes("");
   };
 
   const handleSave = async () => {
-    if (!date.trim() || !time.trim()) {
+    if (!date || !time) {
       Alert.alert("Missing info", "Date and time are required.");
       return;
     }
     setSaving(true);
     try {
+      const dateStr = formatDate(date);
+      const timeStr = formatTime(time);
+
       const { error } = await supabase.from("followups").insert({
         lead_id: leadId,
         user_id: currentUserId,
-        date: date.trim(),
-        time: time.trim(),
+        date: dateStr,
+        time: timeStr,
         type,
         priority,
         notes: notes.trim() || null
@@ -75,7 +79,7 @@ export default function AddFollowupModal({
 
       await supabase
         .from("leads")
-        .update({ next_followup_at: `${date.trim()}T${time.trim()}:00` })
+        .update({ next_followup_at: `${dateStr}T${timeStr}:00` })
         .eq("id", leadId);
 
       reset();
@@ -94,20 +98,10 @@ export default function AddFollowupModal({
           <ScrollView>
             <Text style={styles.title}>Schedule a Followup</Text>
 
-            <Text style={styles.label}>Date & Time</Text>
             <View style={styles.row}>
-              <TextInput
-                style={[styles.input, { flex: 1, marginRight: 8 }]}
-                placeholder="YYYY-MM-DD"
-                value={date}
-                onChangeText={setDate}
-              />
-              <TextInput
-                style={[styles.input, { flex: 1 }]}
-                placeholder="HH:mm"
-                value={time}
-                onChangeText={setTime}
-              />
+              <DateField label="Date" value={date} onChange={setDate} minimumDate={new Date()} />
+              <View style={{ width: 8 }} />
+              <TimeField label="Time" value={time} onChange={setTime} />
             </View>
 
             <Text style={styles.label}>Type</Text>

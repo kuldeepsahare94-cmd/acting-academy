@@ -1,14 +1,18 @@
 # Acting Academy CRM — Mobile App (Phase 1)
 
-React Native (Expo) app covering: login, dashboard counters, lead list with
-search/filters, lead detail with **Call / WhatsApp / SMS / Maps** actions,
-the post-call outcome modal (status, notes, followup), activity timeline,
-followups screen (today + missed), and push notification registration.
+React Native (Expo) app covering: login, a redesigned dashboard (greeting header,
+quick actions, sectioned stat cards with icons — Leads/Followups/Academy),
+lead list with search/filters (status, date range, source, State→City,
+drill-down from dashboard), Add Lead form, lead detail with Call/WhatsApp/
+SMS/Email/Maps actions, the post-call outcome modal with real date/time
+pickers, activity timeline, manual Add Followup, followups screen (today +
+missed), and a **More** tab with full Courses, Students, and Workshops
+modules (add course, student profile with payment history and workshop
+attendance, schedule workshops, register students and mark attendance).
 
 This is the **mobile app only** — the piece you asked to build first. It
-expects a Supabase backend with the tables in `supabase/schema_mobile_subset.sql`.
-The full CRM also needs students, courses, workshops, payments, and admin
-screens (web portal) — happy to build those next.
+expects a Supabase backend with the tables in `supabase/schema_mobile_subset.sql`
+and `supabase/schema_full_addon.sql`.
 
 ## 1. Prerequisites
 - Node.js 18+
@@ -68,8 +72,8 @@ and I'll scope it.
 
 ## What's next
 - Web portal (React) — dashboard, lead management, admin, reports
-- Mobile screens for Students, Courses, Workshops, Payments (schema already
-  exists — see `MODULES.md`)
+- Payments module screens (record a payment against a student — schema
+  already exists, see `MODULES.md`)
 - Backend: Supabase Edge Functions for round-robin assignment, FB/IG lead
   webhook ingestion, scheduled push notifications (missed followup, payment
   due, workshop tomorrow)

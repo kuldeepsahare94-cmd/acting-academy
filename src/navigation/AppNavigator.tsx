@@ -13,6 +13,14 @@ import LeadsListScreen from "@/screens/LeadsListScreen";
 import LeadDetailScreen from "@/screens/LeadDetailScreen";
 import FollowupsScreen from "@/screens/FollowupsScreen";
 import AddLeadScreen from "@/screens/AddLeadScreen";
+import MoreScreen from "@/screens/MoreScreen";
+import CoursesListScreen from "@/screens/CoursesListScreen";
+import AddCourseScreen from "@/screens/AddCourseScreen";
+import StudentsListScreen from "@/screens/StudentsListScreen";
+import StudentDetailScreen from "@/screens/StudentDetailScreen";
+import WorkshopsListScreen from "@/screens/WorkshopsListScreen";
+import AddWorkshopScreen from "@/screens/AddWorkshopScreen";
+import WorkshopDetailScreen from "@/screens/WorkshopDetailScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -51,6 +59,15 @@ function MainTabs() {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar-outline" size={size} color={color} />
+          )
+        }}
+      />
+      <Tab.Screen
+        name="More"
+        component={MoreScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="grid-outline" size={size} color={color} />
           )
         }}
       />
@@ -102,6 +119,41 @@ export default function AppNavigator() {
               name="AddLead"
               component={AddLeadScreen}
               options={{ title: "Add Lead" }}
+            />
+            <Stack.Screen
+              name="CoursesList"
+              component={CoursesListScreen}
+              options={{ title: "Courses" }}
+            />
+            <Stack.Screen
+              name="AddCourse"
+              component={AddCourseScreen}
+              options={{ title: "Add Course" }}
+            />
+            <Stack.Screen
+              name="StudentsList"
+              component={StudentsListScreen}
+              options={{ title: "Students" }}
+            />
+            <Stack.Screen
+              name="StudentDetail"
+              component={StudentDetailScreen}
+              options={{ title: "Student Details" }}
+            />
+            <Stack.Screen
+              name="WorkshopsList"
+              component={WorkshopsListScreen}
+              options={{ title: "Workshops" }}
+            />
+            <Stack.Screen
+              name="AddWorkshop"
+              component={AddWorkshopScreen}
+              options={{ title: "Schedule Workshop" }}
+            />
+            <Stack.Screen
+              name="WorkshopDetail"
+              component={WorkshopDetailScreen}
+              options={{ title: "Workshop Details" }}
             />
           </>
         )}

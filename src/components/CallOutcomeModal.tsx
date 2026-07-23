@@ -12,6 +12,7 @@ import {
 import { supabase } from "@/services/supabase";
 import { CallOutcome } from "@/types";
 import { PendingCall } from "@/hooks/useCallHandler";
+import { DateField, TimeField, formatDate, formatTime } from "@/components/DateTimeFields";
 
 interface Props {
   visible: boolean;
@@ -39,15 +40,15 @@ export default function CallOutcomeModal({
 }: Props) {
   const [outcome, setOutcome] = useState<CallOutcome>("connected_interested");
   const [notes, setNotes] = useState("");
-  const [followupDate, setFollowupDate] = useState(""); // YYYY-MM-DD
-  const [followupTime, setFollowupTime] = useState(""); // HH:mm
+  const [followupDate, setFollowupDate] = useState<Date | null>(null);
+  const [followupTime, setFollowupTime] = useState<Date | null>(null);
   const [saving, setSaving] = useState(false);
 
   const reset = () => {
     setOutcome("connected_interested");
     setNotes("");
-    setFollowupDate("");
-    setFollowupTime("");
+    setFollowupDate(null);
+    setFollowupTime(null);
   };
 
   const handleSave = async () => {
@@ -60,17 +61,20 @@ export default function CallOutcomeModal({
         Math.round((endTime.getTime() - call.startTime.getTime()) / 1000)
       );
 
+      const dateStr = followupDate ? formatDate(followupDate) : null;
+      const timeStr = followupTime ? formatTime(followupTime) : null;
+
       let followupId: string | null = null;
 
       // If a followup was set, create it first so we can link it to the call log.
-      if (followupDate && followupTime) {
+      if (dateStr && timeStr) {
         const { data: followup, error: followupError } = await supabase
           .from("followups")
           .insert({
             lead_id: call.leadId,
             user_id: currentUserId,
-            date: followupDate,
-            time: followupTime,
+            date: dateStr,
+            time: timeStr,
             type: "call",
             priority: "medium",
             notes
@@ -100,10 +104,7 @@ export default function CallOutcomeModal({
         .from("leads")
         .update({
           last_followup_at: endTime.toISOString(),
-          next_followup_at:
-            followupDate && followupTime
-              ? `${followupDate}T${followupTime}:00`
-              : null
+          next_followup_at: dateStr && timeStr ? `${dateStr}T${timeStr}:00` : null
         })
         .eq("id", call.leadId);
 
@@ -158,18 +159,9 @@ export default function CallOutcomeModal({
 
             <Text style={styles.label}>Next Followup (optional)</Text>
             <View style={styles.row}>
-              <TextInput
-                style={[styles.input, { flex: 1, marginRight: 8 }]}
-                placeholder="YYYY-MM-DD"
-                value={followupDate}
-                onChangeText={setFollowupDate}
-              />
-              <TextInput
-                style={[styles.input, { flex: 1 }]}
-                placeholder="HH:mm"
-                value={followupTime}
-                onChangeText={setFollowupTime}
-              />
+              <DateField label="Date" value={followupDate} onChange={setFollowupDate} minimumDate={new Date()} />
+              <View style={{ width: 8 }} />
+              <TimeField label="Time" value={followupTime} onChange={setFollowupTime} />
             </View>
 
             <Pressable

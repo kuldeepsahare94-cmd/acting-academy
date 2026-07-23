@@ -76,3 +76,72 @@ export interface AppUser {
     | "accountant";
   email: string;
 }
+
+export interface Course {
+  id: string;
+  name: string;
+  duration: string | null;
+  fees: number;
+  description: string | null;
+  active: boolean;
+  created_at: string;
+}
+
+export type StudentStatus = "active" | "completed" | "dropped" | "on_hold";
+
+export interface Student {
+  id: string;
+  student_code: string;
+  lead_id: string | null;
+  name: string;
+  mobile: string;
+  email: string | null;
+  address: string | null;
+  city: string | null;
+  state: string | null;
+  parent_name: string | null;
+  parent_mobile: string | null;
+  course_id: string | null;
+  admission_date: string;
+  batch: string | null;
+  status: StudentStatus;
+  created_at: string;
+}
+
+export interface Workshop {
+  id: string;
+  name: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+  venue: string | null;
+  trainer: string | null;
+  capacity: number | null;
+  created_at: string;
+}
+
+export type Attendance = "present" | "absent" | "not_marked";
+
+export interface WorkshopAttendee {
+  id: string;
+  workshop_id: string;
+  student_id: string;
+  attendance: Attendance;
+  registered_at: string;
+}
+
+export type PaymentStatus = "paid" | "partial" | "pending";
+
+export interface Payment {
+  id: string;
+  student_id: string;
+  course_id: string | null;
+  amount: number;
+  due_amount: number;
+  payment_date: string;
+  payment_mode: string | null;
+  transaction_number: string | null;
+  receipt_number: string | null;
+  status: PaymentStatus;
+  created_at: string;
+}

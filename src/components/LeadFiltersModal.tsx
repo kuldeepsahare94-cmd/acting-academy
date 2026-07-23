@@ -9,6 +9,7 @@ import {
   ScrollView
 } from "react-native";
 import SelectField from "@/components/SelectField";
+import { DateField, formatDate } from "@/components/DateTimeFields";
 import { INDIA_STATES, CITIES_BY_STATE } from "@/constants/indiaStatesCities";
 
 export interface LeadFilters {
@@ -75,17 +76,16 @@ export default function LeadFiltersModal({
 
             <Text style={styles.label}>Date Created</Text>
             <View style={styles.row}>
-              <TextInput
-                style={[styles.input, { flex: 1, marginRight: 8 }]}
-                placeholder="From (YYYY-MM-DD)"
-                value={filters.dateFrom}
-                onChangeText={(v) => setFilters((f) => ({ ...f, dateFrom: v }))}
+              <DateField
+                label="From"
+                value={filters.dateFrom ? new Date(filters.dateFrom) : null}
+                onChange={(d) => setFilters((f) => ({ ...f, dateFrom: formatDate(d) }))}
               />
-              <TextInput
-                style={[styles.input, { flex: 1 }]}
-                placeholder="To (YYYY-MM-DD)"
-                value={filters.dateTo}
-                onChangeText={(v) => setFilters((f) => ({ ...f, dateTo: v }))}
+              <View style={{ width: 8 }} />
+              <DateField
+                label="To"
+                value={filters.dateTo ? new Date(filters.dateTo) : null}
+                onChange={(d) => setFilters((f) => ({ ...f, dateTo: formatDate(d) }))}
               />
             </View>
 
